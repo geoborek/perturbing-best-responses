@@ -36,7 +36,7 @@ def normalize_dict(dict):
     s = sum(dict.values())
     return { k:(v/s) for (k,v) in dict.items() }
 
-def perturb(vals, param, type="normal"):
+def perturb(vals, param, type="normal", op="add"):
     match type:
         case "gumbel":
             noise = np.random.gumbel(0, param, len(vals))
@@ -46,7 +46,10 @@ def perturb(vals, param, type="normal"):
             noise = np.random.normal(0, param, len(vals))
         case _:
             noise = np.zeros(len(vals))
-    return vals+noise
+    if op == "add":
+        return vals+noise
+    else:
+        return vals-noise
 
 def get_vals(M, strategy):
     keys = list(strategy.keys())
@@ -62,7 +65,7 @@ def build_sub_matrix(M, col_strategy, row_strategy):
 
 def best_row_response_index(M, col_mixed_strategy, param, type):
     vals = get_vals(np.transpose(M), col_mixed_strategy)
-    index = np.argmin(perturb(vals, param, type))
+    index = np.argmin(perturb(vals, param, type, "sub"))
     return index
 
 def best_row_response_val(M, col_mixed_strategy):
@@ -290,7 +293,7 @@ if __name__ == "__main__":
     # )
     # M = gm.symmetric_game(M)
     # M = gm.rand_sym_game(500)
-    n = 3
+    n = 30
     M = examples.exMorra(n)
     # M = np.load("theorem_3.5.npy")
     # M = examples.rand_game(100, 100)
