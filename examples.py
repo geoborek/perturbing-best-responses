@@ -314,7 +314,7 @@ def DO_Nash(g, ep, param=0.3, type="normal"):
 
 if __name__ == "__main__":
 
-    g = Theorem3_5(256)
+    g = Theorem3_3(256)
     print(g.M)
     # print(g.masks)
     rval, cval, t, cne, rne = DO_Nash(g, 0.1, 0, "uniform")

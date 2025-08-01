@@ -6,7 +6,7 @@ from tqdm import tqdm
 import pandas as pd
 
 EP = 0.1
-TYPE = "normal"
+TYPE = "uniform"
 PARAM = 0.5
 
 SIZES = range(2, 100,5) 
@@ -23,9 +23,9 @@ if __name__ == "__main__":
         
         iters = np.zeros(REPETITIONS)
         iters_nop = np.zeros(REPETITIONS)
-        M = examples.exMorra(n)
+        M = -examples.ex3_2(n)
+        # g = examples.Theorem3_3(n)
         for r in range(REPETITIONS):
-            # g = examples.Theorem3_3(n)
             rval, cval, t, cne, rne = solver.DO_Nash(M, EP, PARAM, TYPE)
             # print(rval, cval, t)
             iters[r] = t
@@ -42,4 +42,4 @@ if __name__ == "__main__":
 
     data = np.array([means, stds, means_nop])
     df = pd.DataFrame(data, columns=SIZES, index=['means', 'stds', 'means_nop'])
-    df.to_csv("experiments/SDO_Morra.csv", mode='a')
+    df.to_csv("experiments/SDO_3_2.csv", mode='a')
