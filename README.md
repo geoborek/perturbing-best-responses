@@ -12,6 +12,7 @@
 # Experiments
 
 - SDO_3_2_eff_exp.py SDO with efficient perturbations applied to the example from Theorem 3.2 (Expoential lower bound)
+- SDO_Blotto.py SDO applied to the Blotto game 
 - SDO_Morra_exp.py SDO applied to the Morra game
 - SDO_Morra_crisp_exp.py as above but crisp version of the Morra game (maybe it is not a good example)
 - SDO_path_planning_exp.py SDO applied to the path-planning game
