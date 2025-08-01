@@ -19,9 +19,3 @@
 - SFP_Morra_exp.py SFP applied to the Morra game
 - SFP_random_exp.py SFP applied to random normal-form games
 
-# TODO
-
-- extend experiments to investigate influence of the variance
-- draw tikz pictures of Markov games from Theorems 3.2 and 3.3
-- visualize the clustering of the matrices for the above examples
-- visualize path-planning game on the grid, particularly cost of edges and perhaps equilibrium strategies for a small instance
