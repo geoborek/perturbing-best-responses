@@ -41,9 +41,9 @@ EP = 0.1
 TYPE = "uniform"
 PARAMS = [0.00001, 0.001]
 
-bfs = range(3,4)
+# bfs = range(3,4)
 # bfs = range(4,5)
-# bfs = range(5,6)
+bfs = range(5,6)
 units = range(5, 50) 
 REPETITIONS = 10
 
@@ -85,7 +85,8 @@ if __name__ == "__main__":
     plt.xlabel("units budget")
     plt.ylabel("iterations")
     plt.legend()
-    plt.savefig(rf"C:\Users\tupol\Desktop\PhD\game theory\main\perturbing-best-responses\plots\SDO Blotto {bfs[0]} bfs, type {TYPE}.png")
+    plt.show()
+    # plt.savefig(rf"C:\Users\tupol\Desktop\PhD\game theory\main\perturbing-best-responses\plots\SDO Blotto {bfs[0]} bfs, type {TYPE}.png")
     
     data = np.array([means, stds, means_nop])
     df = pd.DataFrame(data, columns=range(len(bfs) * len(units)), index=['means', 'stds', 'means_nop'])

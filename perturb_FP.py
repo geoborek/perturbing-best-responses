@@ -293,7 +293,7 @@ if __name__ == "__main__":
     # )
     # M = gm.symmetric_game(M)
     # M = gm.rand_sym_game(500)
-    n = 30
+    n = 100
     M = examples.exMorra(n)
     # M = np.load("theorem_3.5.npy")
     # M = examples.rand_game(100, 100)

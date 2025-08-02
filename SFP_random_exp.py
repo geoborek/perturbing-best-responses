@@ -10,7 +10,7 @@ TYPE = "gumbel"
 # PARAM = 2/EP
 
 SIZES = range(100, 1001, 100) 
-REPETITIONS = 10
+REPETITIONS = 100
 
 if __name__ == "__main__":
     
@@ -41,10 +41,14 @@ if __name__ == "__main__":
         means_nop[i] = iters_nop.mean()
         stds_nop[i] = iters_nop.std()
 
-    plt.plot(SIZES, means)
+    plt.plot(SIZES, means, label="SFP")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
-    plt.plot(SIZES, means_nop)
+    plt.plot(SIZES, means_nop, label="FP")
     plt.fill_between(SIZES, np.subtract(means_nop, stds_nop), np.add(means_nop, stds_nop), alpha=0.2)
+    # plt.title("gumbel perturbation")
+    plt.xlabel("size")
+    plt.ylabel("iterations")
+    plt.legend(loc="upper left")
     plt.show()
 
     data = np.array([means, stds, means_nop, stds_nop])

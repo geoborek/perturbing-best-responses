@@ -9,7 +9,7 @@ EP = 0.1
 TYPE = "gumbel"
 # PARAM = 2/EP
 
-SIZES = range(5, 106, 10) 
+SIZES = range(100, 1001, 100) 
 REPETITIONS = 10
 
 if __name__ == "__main__":
@@ -21,13 +21,13 @@ if __name__ == "__main__":
 
     for i, n in tqdm(enumerate(SIZES)):
 
-        sqrtT = (2+np.sqrt(2*np.log(n**2)))/EP
-        PARAM = sqrtT/np.sqrt(8*np.log(n**2))
+        sqrtT = (2+np.sqrt(2*np.log(n)))/EP
+        PARAM = sqrtT/np.sqrt(8*np.log(n)) 
         # print(PARAM)
 
         iters = np.zeros(REPETITIONS)
         iters_nop = np.zeros(REPETITIONS)
-        M = examples.exMorra(n)
+        M = -examples.ex3_2(n)
         for r in range(REPETITIONS):
             # g = examples.Theorem3_3(n)
             rval, cval, t, cne, rne = solver.FP_Nash(M, EP, PARAM, TYPE)
@@ -49,4 +49,4 @@ if __name__ == "__main__":
 
     data = np.array([means, stds, means_nop])
     df = pd.DataFrame(data, columns=SIZES, index=['means', 'stds', 'means_nop'])
-    df.to_csv("experiments/SFP_Morra.csv", mode='a')
+    df.to_csv("experiments/SFP_3_2.csv", mode='a')
