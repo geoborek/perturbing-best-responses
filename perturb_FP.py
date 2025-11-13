@@ -113,43 +113,40 @@ def FP_Nash(M, ep, param, type="gumbel"):
 
     return rval/t, cval/t, t, normalize_dict(X), normalize_dict(Y)
 
-# One-sided variant of FP for skew-symmetric matrices
-def Sym_FP_Nash(M, ep, param, type="gumbel"):
+def AFP_Nash(M, ep, param=0, type="gumbel"):
     t = 1
 
-    k = np.random.randint(0, M.shape[1])
+    k = 0 #np.random.randint(0, M.shape[1])
+    l = 0 #np.random.randint(0, M.shape[0])
     X = {k:1}  
+    Y = {l:1}
 
-    val = best_col_response_val(M, X)
+    cval = best_col_response_val(M, Y)
+    rval = best_row_response_val(M, X)
     
-    while val > t*ep:
+    while cval-rval > t*ep:
 
         # if t % 100 == 0:
         #     print(t)
         t += 1
-        k = best_col_response_index(M, X, param, type)
+        l = best_row_response_index(M, X, param, type)
+        k = best_col_response_index(M, Y, param, type)
 
         # FP update
+        Yp = update_dict(Y.copy(), l, 1)
+        Xp = update_dict(X.copy(), k, 1)
+
+        l = best_row_response_index(M, Xp, param, type)
+        k = best_col_response_index(M, Yp, param, type)
+
+        # FP update
+        Y = update_dict(Y, l, 1)
         X = update_dict(X, k, 1)
 
-        val = best_col_response_val(M, X)
+        rval = best_row_response_val(M, X)
+        cval = best_col_response_val(M, Y)
 
-    return val/t, t, normalize_dict(X)
-
-# To be removed. It doesn't seem to be useful at this point.
-def softmax_dynamics(M, X, Y, eta, iter):
-    # X = np.ones(M.shape[1])/M.shape[1]
-    # Y = np.ones(M.shape[0])/M.shape[0]
-    for i in range(iter):
-        # print(X,Y)
-        Y = softmax(np.matmul(M, X), -eta)
-        X = softmax(np.matmul(Y, M), eta)
-    #     diff = max(np.linalg.norm(X-X2, np.inf), np.linalg.norm(Y-Y2, np.inf))
-    #     X = X2
-    #     Y = Y2
-    #     if diff < ep:
-    #         break
-    return X, Y
+    return rval/t, cval/t, t, normalize_dict(X), normalize_dict(Y)
 
 def DO_Nash(M, ep, param=0.0, type="none"):
     t = 1
@@ -172,97 +169,11 @@ def DO_Nash(M, ep, param=0.0, type="none"):
         Y = update_dict(Y, l, 1)
         X = update_dict(X, k, 1)
 
-        # Y = normalize_dict(update_dict({ k:(t-1)*Y[k] for k in Y.keys() }, l, 1))
-        # X = normalize_dict(update_dict({ k:(t-1)*X[k] for k in X.keys() }, k, 1))
 
         # DO update
         S, ckeys, rkeys = build_sub_matrix(M, X, Y)
         # _, _, n, cstrag, rstrag = FP_Nash(S, 0.05)
         _, cstrag, rstrag = game.solve_game(np.transpose(-S))
-        # rws = np.exp(1*get_vals(np.transpose(M), X))
-        # Y = normalize_dict( { k:Y[k]*rws[i] for i, k in enumerate(sorted(Y.keys())) } )
-        # cws = np.exp(1*get_vals(M, Y))
-        # X = normalize_dict( { k:X[k]*cws[i] for i, k in enumerate(sorted(X.keys())) } )
-
-        # cidxs = sorted(cstrag.keys())
-        # ridxs = sorted(rstrag.keys())
-        X = { k:cstrag[i] for (k,i) in zip(ckeys, range(len(cstrag))) }
-        Y = { k:rstrag[i] for (k,i) in zip(rkeys, range(len(rstrag))) }
-        # print(X,Y)
-        rval = best_row_response_val(M, X)
-        cval = best_col_response_val(M, Y)
-        # print(cval, rval)
-
-    return rval, cval, t, normalize_dict(X), normalize_dict(Y)
-
-# One-sided variant of FP for skew-symmetric matrices
-def Sym_DO_Nash(M, ep, param=0.3, type="normal"):
-    t = 1
-
-    k = 0 #np.random.randint(0, len(M))
-    X = {k:1.0}  
-
-    val = best_col_response_val(M, X)
-    
-    while val > ep:
-        # print(X,Y)
-        # if t % 100 == 0:
-        #     print(t)
-        t += 1
-        k = best_col_response_index(M, X, param, type)
-        X = update_dict(X, k, 1)
-
-        # Y = normalize_dict(update_dict({ k:(t-1)*Y[k] for k in Y.keys() }, l, 1))
-        # X = normalize_dict(update_dict({ k:(t-1)*X[k] for k in X.keys() }, k, 1))
-
-        # DO update
-        S, ckeys, rkeys = build_sub_matrix(M, X, X)
-        # _, _, n, cstrag, rstrag = FP_Nash(S, 0.05)
-        _, cstrag, rstrag = game.solve_game(np.transpose(-S))
-        # rws = np.exp(1*get_vals(np.transpose(M), X))
-        # Y = normalize_dict( { k:Y[k]*rws[i] for i, k in enumerate(sorted(Y.keys())) } )
-        # cws = np.exp(1*get_vals(M, Y))
-        # X = normalize_dict( { k:X[k]*cws[i] for i, k in enumerate(sorted(X.keys())) } )
-
-        # cidxs = sorted(cstrag.keys())
-        # ridxs = sorted(rstrag.keys())
-        X = { k:cstrag[i] for (k,i) in zip(ckeys, range(len(cstrag))) }
-        # print(X,Y)
-        val = best_col_response_val(M, X)
-        # print(cval, rval)
-
-    return val, t, normalize_dict(X)
-
-def DO_FP_Nash(M, ep, param=0.3, type="normal"):
-    t = 1
-
-    k = 0 #np.random.randint(0, len(M))
-    l = 0 #np.random.randint(0, len(M))
-    X = {k:1.0}  
-    Y = {l:1.0}
-
-    cval = best_col_response_val(M, Y)
-    rval = best_row_response_val(M, X)
-    
-    while cval-rval > ep:
-        t += 1
-        l = best_row_response_index(M, X, param, type)
-        k = best_col_response_index(M, Y, param, type)
-        Y = update_dict(Y, l, 1)
-        X = update_dict(X, k, 1)
-
-        # DO update
-        S, ckeys, rkeys = build_sub_matrix(M, X, Y)
-        rv, cv, it, cst, rst = FP_Nash(S, ep, 2/ep)
-        # print(rv, cv, it)
-        cstrag = np.zeros(S.shape[1])
-        rstrag = np.zeros(S.shape[0])
-        for i in range(len(cstrag)):
-            if i in cst.keys():
-                cstrag[i] = cst[i]
-        for i in range(len(rstrag)):
-            if i in rst.keys():
-                rstrag[i] = rst[i]
 
         X = { k:cstrag[i] for (k,i) in zip(ckeys, range(len(cstrag))) }
         Y = { k:rstrag[i] for (k,i) in zip(rkeys, range(len(rstrag))) }
@@ -301,28 +212,4 @@ if __name__ == "__main__":
     rval, cval, t, cne, rne = FP_Nash(M, EP, 2/EP, "gumbel")
     print(cval, rval, t) #, cne, rne)
 
-    # val, t, ne = Sym_DO_Nash(M, EP, 0.5, "uniform")
-    # print(val, t, ne)
 
-    # X = np.ones(M.shape[1])/M.shape[1]
-    # Y = np.ones(M.shape[0])/M.shape[0]
-    # cstrag, rstrag = softmax_dynamics(M, X, Y, 100, 1)
-    # print(cstrag, rstrag)
-    # print(game.solve_game(np.transpose(-M)))
-
-    # print(expected_index(M[599], 0.1))
-    # plt.plot(range(len(M)), softmax(M[2], 0.1))
-    # plt.plot(range(len(M)), softmax(M[299], 0.1))
-    # plt.plot(range(len(M)), softmax(M[599], 0.1))
-    # plt.show()
-
-    indexes = [expected_perturb_index(M[i], 100) for i in range(len(M)-1)]
-    plt.plot(range(len(M)-1), indexes)
-    plt.plot(range(len(M)-1), np.array(range(len(M)-1)))
-    indexes = [expected_index(M[i], 10) for i in range(len(M)-1)]
-    plt.plot(range(len(M)-1), indexes)
-    # indexes = [expected_index(M[i], 0.01) for i in range(len(M))]
-    # plt.plot(range(len(M)), indexes)
-    plt.show()
-    
-    # print(indexes)

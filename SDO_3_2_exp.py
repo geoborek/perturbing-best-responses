@@ -23,7 +23,7 @@ if __name__ == "__main__":
         
         iters = np.zeros(REPETITIONS)
         iters_nop = np.zeros(REPETITIONS)
-        M = -examples.ex3_2(n)
+        M = -examples.exU(n)
         # g = examples.Theorem3_3(n)
         for r in range(REPETITIONS):
             rval, cval, t, cne, rne = solver.DO_Nash(M, EP, PARAM, TYPE)

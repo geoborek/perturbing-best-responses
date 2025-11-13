@@ -35,7 +35,7 @@ def ex2(n):
             M[i,j] = 1
     return M - np.transpose(M)
 
-def ex3_2(n):
+def exU(n):
     M = np.zeros((n,n))
     for i in range(0,n):
         for j in range(i+1,n):
@@ -45,7 +45,7 @@ def ex3_2(n):
                 M[i,j] = -0.5 #-1.1*EP
     return (M - np.transpose(M))    
 
-def ex3_3(n):
+def exS(n):
     M = np.zeros((n,n))
     for i in range(0,n):
         for j in range(i+1,n):
@@ -66,7 +66,7 @@ def exMorra(n):
                 M[i1*n+j1,i2*n+j2] = (i1+i2)
             else:
                 M[i1*n+j1,i2*n+j2] = 0
-    return (1/(2*n-2))*M
+    return (1/(4*n-4))*M+0.5
 
 def exMorra_crisp(n):
     M = np.zeros((n**2,n**2))
