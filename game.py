@@ -14,7 +14,7 @@ def modify_vector(x, i, coef):
 def distance(n, coef, x, y):
     f1 = (x + y) / n
     f2 = (2*n - x - y) / n
-    return min(f1, f2)/(2*n-1+coef)
+    return min(f1, f2) #/(2*n-1+coef)
 
 class Game(ABC):
 
@@ -68,10 +68,9 @@ class Game(ABC):
 
 class Grid(Game):
 
-    def __init__(self, n, m, coef):
+    def __init__(self, n, coef):
         super().__init__()
         self.size = n
-        self.num = m
         self.coef = coef
         self.costs, self.actions = self.generate_costs()
         self.s0 = (0,0)
@@ -84,11 +83,11 @@ class Grid(Game):
             for j in range(self.size+1):
                 if i != self.size:
                     actions[((i,j),0)] = k
-                    costs[k] = distance(self.size, self.coef, i+0.5, j) #(self.size - abs(self.size-i-j))/(3*self.size)  #random.uniform(1, self.num)
+                    costs[k] = distance(self.size, self.coef, i+0.5, j) #(self.size - abs(self.size-i-j))/(3*self.size) 
                     k += 1
                 if j != self.size:
                     actions[((i,j),1)] = k
-                    costs[k] = distance(self.size, self.coef, i, j+0.5) #(self.size - abs(self.size-i-j))/(3*self.size)  #random.uniform(1, self.num)
+                    costs[k] = distance(self.size, self.coef, i, j+0.5) #(self.size - abs(self.size-i-j))/(3*self.size) 
                     k += 1
         # print(actions)
         # print(costs)
@@ -254,18 +253,19 @@ if __name__ == '__main__':
 
     COEF = 10
     EP = 0.1
-    SIGMA = 0.01
-    SIZE = 5
+    SIGMA = 0.001
+    SIZE = 10
 
-    g = Grid(SIZE, 5, COEF)
-    rval, cval, t, X, Y = FP_Nash(g, EP, SIGMA, "normal")
-    print(g.M)
+    g = Grid(SIZE, COEF)
+    rval, cval, t, X, Y = DO_Nash(g, EP, SIGMA, "uniform")
+    print(g.actions)
+    print(g.costs)
     print(rval, cval, t, len(X), len(Y))
     print([g.strategies2[i] for i in range(len(X)) if X[i] > 0])    
     # print([g.strategies1[i] for i in range(len(Y)) if Y[i] > 0])
 
-    g = Grid(SIZE, 5, COEF)
-    rval, cval, t, X, Y = FP_Nash(g, EP, 0, "none")
+    g = Grid(SIZE, COEF)
+    rval, cval, t, X, Y = DO_Nash(g, EP, 0, "none")
     # print(g.M)
     print(rval, cval, t, len(X), len(Y))
     print([g.strategies2[i] for i in range(len(X)) if X[i] > 0])    

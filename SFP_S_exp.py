@@ -1,14 +1,15 @@
+import examples
+import perturb_FP as solver
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
-import examples 
 
 EP = 0.1
-TYPE = "uniform"
-PARAM = 0.5
+TYPE = "gumbel"
+# PARAM = 2/EP
 
-SIZES = [2**i for i in range(2, 11)] 
+SIZES = range(100, 1001, 100) 
 REPETITIONS = 10
 
 if __name__ == "__main__":
@@ -16,28 +17,36 @@ if __name__ == "__main__":
     means = np.zeros(len(SIZES))
     stds = np.zeros(len(SIZES))
     means_nop = np.zeros(len(SIZES))
-    
+    stds_nop = np.zeros(len(SIZES))
+
     for i, n in tqdm(enumerate(SIZES)):
-        
+
+        sqrtT = (2+np.sqrt(2*np.log(n)))/EP
+        PARAM = sqrtT/np.sqrt(8*np.log(n)) 
+        # print(PARAM)
+
         iters = np.zeros(REPETITIONS)
         iters_nop = np.zeros(REPETITIONS)
-        g = examples.Theorem3_2(n)
+        M = -examples.exS(n)
         for r in range(REPETITIONS):
-            # g = examples.Theorem3_3(n)
-            rval, cval, t, cne, rne = examples.DO_Nash(g, EP, PARAM, TYPE)
+            rval, cval, t, cne, rne = solver.FP_Nash(M, EP, PARAM, TYPE)
             # print(rval, cval, t)
             iters[r] = t
+        rval, cval, t, cne, rne = solver.FP_Nash(M, EP, 0, "none")
 
-        # rval, cval, t, cne, rne = examples.DO_Nash(g, EP, 0, "none")
         means[i] = iters.mean()
         stds[i] = iters.std()
-        # means_nop[i] = t
+        means_nop[i] = t
 
-    plt.plot(SIZES, means)
+    plt.plot(SIZES, means, label="SFP")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
-    # plt.plot(SIZES, means_nop)
+    plt.plot(SIZES, means_nop, label="FP")
+    plt.xlabel("size")
+    plt.ylabel("iterations")
+    plt.legend(loc="upper left")
+
     plt.show()
 
     data = np.array([means, stds, means_nop])
     df = pd.DataFrame(data, columns=SIZES, index=['means', 'stds', 'means_nop'])
-    # df.to_csv("experiments/Sym_SDO_3_2_eff.csv", mode='a')
+    df.to_csv("experiments/SFP_S.csv", mode='a')

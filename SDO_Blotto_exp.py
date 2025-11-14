@@ -39,7 +39,7 @@ def blotto_game(bfs, resources):
 
 EP = 0.1
 TYPE = "uniform"
-PARAMS = [0.00001, 0.001]
+PARAMS = [0.01, 0.001]
 
 # bfs = range(3,4)
 # bfs = range(4,5)
@@ -64,7 +64,6 @@ if __name__ == "__main__":
                 iters_nop = np.zeros(REPETITIONS)
                 M = blotto_game(bf, unit)
                 for r in range(REPETITIONS):
-                    # g = examples.Theorem3_3(n)
                     rval, cval, t, cne, rne = solver.DO_Nash(M, EP, PARAM, TYPE)
                     # print(rval, cval, t)
                     iters[r] = t
@@ -77,7 +76,7 @@ if __name__ == "__main__":
         base_str = f"{PARAM:.0e}"  # gives '1e-03'
         coeff, exp = base_str.split('e')
         exp = int(exp)
-        new_label = fr"$\sigma = {coeff} \times 10^{{{exp}}}$"
+        new_label = fr"U(-{PARAM},{PARAM})"
 
         plt.plot(range(len(bfs) * len(units)), means, label = new_label)
         plt.fill_between(range(len(bfs) * len(units)), np.subtract(means, stds), np.add(means, stds), alpha=0.2)

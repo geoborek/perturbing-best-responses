@@ -161,9 +161,9 @@ class Theorem3_2(Game):
         for i in range(0,self.n):
             for j in range(i+1,self.n):
                 if j==i+1:
-                    M[i,j] = 1
+                    M[i,j] = 2
                 else:
-                    M[i,j] = 0.5
+                    M[i,j] = 1
         return (M - np.transpose(M))  
        
     def get_terminal_index(self, x, y):

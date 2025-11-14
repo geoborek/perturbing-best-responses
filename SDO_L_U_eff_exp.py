@@ -1,15 +1,14 @@
-import examples
-import perturb_FP as solver
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 import pandas as pd
+import examples 
 
 EP = 0.1
 TYPE = "uniform"
-PARAM = 0.001
+PARAM = 1
 
-SIZES = range(10, 101, 5) 
+SIZES = [2**i for i in range(2, 12)]
 REPETITIONS = 10
 
 np.random.seed(1)
@@ -18,48 +17,48 @@ if __name__ == "__main__":
     
     means = np.zeros(len(SIZES))
     stds = np.zeros(len(SIZES))
-    means_nop = np.zeros(len(SIZES))
-
+    
     for i, n in tqdm(enumerate(SIZES)):
         
         iters = np.zeros(REPETITIONS)
-        M = examples.exMorra(n)
+        iters_nop = np.zeros(REPETITIONS)
+        g = examples.Theorem3_2(n)
         for r in range(REPETITIONS):
             # g = examples.Theorem3_3(n)
-            rval, cval, t, cne, rne = solver.DO_Nash(M, EP, PARAM, TYPE)
+            rval, cval, t, cne, rne = examples.DO_Nash(g, EP, PARAM, TYPE)
             # print(rval, cval, t)
             iters[r] = t
-        rval, cval, t, cne, rne = solver.DO_Nash(M, EP, 0, "none")
 
+        # rval, cval, t, cne, rne = examples.DO_Nash(g, EP, 0, "none")
         means[i] = iters.mean()
         stds[i] = iters.std()
-        means_nop[i] = t
+        # means_nop[i] = t
 
-    label = "U(-0.001,0.001)"
-    plt.plot(SIZES, means, label=label)
+    plt.plot(SIZES, means, label="U")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
-    plt.plot(SIZES, means_nop)
 
-    PARAM = 0.01
     means = np.zeros(len(SIZES))
     stds = np.zeros(len(SIZES))
-
+    
     for i, n in tqdm(enumerate(SIZES)):
         
         iters = np.zeros(REPETITIONS)
-        M = examples.exMorra(n)
+        iters_nop = np.zeros(REPETITIONS)
+        g = examples.Theorem3_3(n)
         for r in range(REPETITIONS):
             # g = examples.Theorem3_3(n)
-            rval, cval, t, cne, rne = solver.DO_Nash(M, EP, PARAM, TYPE)
+            rval, cval, t, cne, rne = examples.DO_Nash(g, EP, PARAM, TYPE)
             # print(rval, cval, t)
             iters[r] = t
 
+        # rval, cval, t, cne, rne = examples.DO_Nash(g, EP, 0, "none")
         means[i] = iters.mean()
         stds[i] = iters.std()
+        # means_nop[i] = t
 
-    label = "U(-0.01,0.01)"
-    plt.plot(SIZES, means, label=label)
+    plt.plot(SIZES, means, label="L")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
+
     plt.title("uniform perturbation")
     plt.xlabel("size")
     plt.ylabel("iterations")
@@ -67,6 +66,6 @@ if __name__ == "__main__":
 
     plt.show()
 
-    # data = np.array([means, stds, means_nop])
-    # df = pd.DataFrame(data, columns=SIZES, index=['means', 'stds', 'means_nop'])
-    # df.to_csv("experiments/SDO_Morra.csv", mode='a')
+    # data = np.array([means, stds])
+    # df = pd.DataFrame(data, columns=SIZES, index=['means', 'stds'])
+    # df.to_csv("experiments/Sym_SDO_3_2_eff.csv", mode='a')
