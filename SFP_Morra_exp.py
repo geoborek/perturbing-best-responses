@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
         iters = np.zeros(REPETITIONS)
         iters_afp_p = np.zeros(REPETITIONS)
-        M = examples.exMorra(n)
+        M = examples.exMorra(n)/2 + 0.5
         for r in range(REPETITIONS):
             # g = examples.Theorem3_3(n)
             rval, cval, t, cne, rne = solver.FP_Nash(M, EP, PARAM, TYPE)

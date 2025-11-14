@@ -47,6 +47,8 @@ bfs = range(5,6)
 units = range(5, 50) 
 REPETITIONS = 10
 
+np.random.seed(1)
+
 if __name__ == "__main__":
     for PARAM in PARAMS:
 

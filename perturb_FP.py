@@ -113,7 +113,7 @@ def FP_Nash(M, ep, param, type="gumbel"):
 
     return rval/t, cval/t, t, normalize_dict(X), normalize_dict(Y)
 
-def AFP_Nash(M, ep, param=0, type="gumbel"):
+def AFP_Nash(M, ep, param=0.0, type="gumbel"):
     t = 1
 
     k = 0 #np.random.randint(0, M.shape[1])
@@ -125,7 +125,7 @@ def AFP_Nash(M, ep, param=0, type="gumbel"):
     rval = best_row_response_val(M, X)
     
     while cval-rval > t*ep:
-
+        # print((cval-rval)/t)
         # if t % 100 == 0:
         #     print(t)
         t += 1
@@ -160,6 +160,7 @@ def DO_Nash(M, ep, param=0.0, type="none"):
     rval = best_row_response_val(M, X)
     
     while cval-rval > ep:
+        # print(cval-rval)
         # print(X,Y)
         # if t % 100 == 0:
         #     print(t)
@@ -204,12 +205,14 @@ if __name__ == "__main__":
     # )
     # M = gm.symmetric_game(M)
     # M = gm.rand_sym_game(500)
-    n = 100
+    n = 40
     M = examples.exMorra(n)
     # M = np.load("theorem_3.5.npy")
     # M = examples.rand_game(100, 100)
-    print(M)
-    rval, cval, t, cne, rne = FP_Nash(M, EP, 2/EP, "gumbel")
-    print(cval, rval, t) #, cne, rne)
+    # print(M)
+    rval, cval, t, cne, rne = AFP_Nash(M, EP, 2/EP, "gumbel")
+    print(cval, rval, t)# , cne, rne)
 
+    rval, cval, t, cne, rne = DO_Nash(M, EP, SIGMA, "normal")
+    print(cval, rval, t) #, cne, rne)
 

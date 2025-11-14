@@ -6,11 +6,13 @@ from tqdm import tqdm
 import pandas as pd
 
 EP = 0.1
-TYPE = "normal"
-PARAM = 0.5
+TYPE = "uniform"
+PARAM = 0.001
 
-SIZES = range(2, 100,5) 
+SIZES = range(10, 101, 5) 
 REPETITIONS = 10
+
+np.random.seed(1)
 
 if __name__ == "__main__":
     
