@@ -21,7 +21,7 @@ This repository contains the code accompanying the following paper:
 - astar.py implementation of A* algorithm for the path planning game
 - examples.py examples of normal-form games and clustered normal-form games for efficient perturbations
 - game.py path-planning game on the grid together with SDO and SFP implementations
-- perturb_FP.py FP, DO, AFP, SFP, SDO, and SAFP implementation for normal-form games
+- perturb_FP.py implementations of FP, DO, AFP, SFP, SDO, and SAFP for normal-form games
 - pqueue.py priority queue for A* algorithm
 - zero_sum.py LP solver for zero-sum normal-form games (uses scipy LP solver)
 
