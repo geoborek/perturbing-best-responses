@@ -23,5 +23,5 @@ This repository contains the code accompanying the following paper:
 - game.py path-planning game on the grid together with SDO and SFP implementations
 - perturb_FP.py FP, DO, AFP, SFP, SDO, and SAFP implementation for normal-form games
 - pqueue.py priority queue for A* algorithm
-- zero_sum.py LP solver for zero-sum normal-form games
+- zero_sum.py LP solver for zero-sum normal-form games (uses scipy LP solver)
 
