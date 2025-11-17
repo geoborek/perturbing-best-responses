@@ -4,6 +4,10 @@ This repository contains the code accompanying the following paper:
 
 > A. Dziwoki and R. Horcik. Perturbing Best Responses in Zero-Sum Games. AAAI 2026.
 
+# Requirements
+
+The code depends only on standard python libraries as numpy, scipy, pandas, matplotlib, tqdm.
+
 # Experiments
 
 - SFP_random_exp.py SFP applied to random normal-form games
