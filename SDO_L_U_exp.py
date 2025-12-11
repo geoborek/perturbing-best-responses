@@ -37,6 +37,7 @@ if __name__ == "__main__":
         means[i] = iters.mean()
         stds[i] = iters.std()
 
+    plt.rcParams.update({'font.size': 20})
     plt.plot(SIZES, means, label="U")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
     # plt.plot(SIZES, means_nop, label="FP")

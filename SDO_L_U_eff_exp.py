@@ -34,6 +34,8 @@ if __name__ == "__main__":
         stds[i] = iters.std()
         # means_nop[i] = t
 
+
+    plt.rcParams.update({'font.size': 20})
     plt.plot(SIZES, means, label="U")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
 

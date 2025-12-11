@@ -35,8 +35,9 @@ if __name__ == "__main__":
         stds[i] = iters.std()
         means_nop[i] = t
 
-    plt.plot(SIZES, means_nop, label="No perturbations")
-    plt.plot(SIZES, means, label="U(-0.01,0.01)")
+    plt.rcParams.update({'font.size': 20})
+    plt.plot(SIZES, means_nop, label="No pert.")
+    plt.plot(SIZES, means, label="d=0.01")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
 
     PARAM = 0.001
@@ -55,7 +56,7 @@ if __name__ == "__main__":
         means[i] = iters.mean()
         stds[i] = iters.std()
 
-    plt.plot(SIZES, means, label="U(-0.001,0.001)")
+    plt.plot(SIZES, means, label="d=0.001")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
 
 

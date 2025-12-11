@@ -35,10 +35,10 @@ if __name__ == "__main__":
         stds[i] = iters.std()
         means_nop[i] = t
 
-    label = "U(-0.001,0.001)"
+    label = "d=0.001" #"U(-0.001,0.001)"
+    plt.rcParams.update({'font.size': 20})
     plt.plot(SIZES, means, label=label)
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
-    plt.plot(SIZES, means_nop)
 
     PARAM = 0.01
     means = np.zeros(len(SIZES))
@@ -57,13 +57,15 @@ if __name__ == "__main__":
         means[i] = iters.mean()
         stds[i] = iters.std()
 
-    label = "U(-0.01,0.01)"
+    label = "d=0.01" #"U(-0.01,0.01)"
     plt.plot(SIZES, means, label=label)
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
+    plt.plot(SIZES, means_nop, label="No pert.")
+
     plt.title("uniform perturbation")
     plt.xlabel("size")
     plt.ylabel("iterations")
-    plt.legend(loc="upper left")
+    plt.legend(loc="lower right")
 
     plt.show()
 

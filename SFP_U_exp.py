@@ -49,6 +49,7 @@ if __name__ == "__main__":
         rval, cval, t, cne, rne = solver.AFP_Nash(M, EP, 0, "none")
         means_afp[i] = t
 
+    plt.rcParams.update({'font.size': 20})
     plt.plot(SIZES, means, label="SFP")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
     plt.plot(SIZES, means_nop, label="FP")

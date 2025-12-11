@@ -56,6 +56,7 @@ if __name__ == "__main__":
         means_afp_p[i] = iters_afp_p.mean()
         stds_afp_p[i] = iters_afp_p.std()
 
+    plt.rcParams.update({'font.size': 20})
     plt.plot(SIZES, means, label="SFP")
     plt.fill_between(SIZES, np.subtract(means, stds), np.add(means, stds), alpha=0.2)
     plt.plot(SIZES, means_nop, label="FP")

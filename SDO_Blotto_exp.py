@@ -48,6 +48,7 @@ units = range(5, 50)
 REPETITIONS = 10
 
 np.random.seed(1)
+plt.rcParams.update({'font.size': 20})
 
 if __name__ == "__main__":
     for PARAM in PARAMS:
@@ -76,11 +77,11 @@ if __name__ == "__main__":
         base_str = f"{PARAM:.0e}"  # gives '1e-03'
         coeff, exp = base_str.split('e')
         exp = int(exp)
-        new_label = fr"U(-{PARAM},{PARAM})"
+        new_label = fr"d={PARAM}"
 
         plt.plot(range(len(bfs) * len(units)), means, label = new_label)
         plt.fill_between(range(len(bfs) * len(units)), np.subtract(means, stds), np.add(means, stds), alpha=0.2)
-    plt.plot(range(len(bfs) * len(units)), means_nop, label = "No perturbation")
+    plt.plot(range(len(bfs) * len(units)), means_nop, label = "No pert.")
     
     plt.title(f"{bfs[0]} battlefields")
     plt.xlabel("units budget")
